@@ -110,7 +110,7 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 				FirstName             string      `json:"first_name"`
 				LastName              string      `json:"last_name"`
 				IP4Sub                string      `json:"ip4Sub"`
-				Sourceid              string      `json:"sourceid"`
+				Sourceid              interface{} `json:"sourceid,string"`
 				AutosyncLog           interface{} `json:"autosyncLog"`
 				IP4Last               string      `json:"ip4_last"`
 				IP4Unsub              string      `json:"ip4Unsub"`
@@ -168,7 +168,7 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 			FirstName             string      `json:"first_name"`
 			LastName              string      `json:"last_name"`
 			IP4Sub                string      `json:"ip4Sub"`
-			Sourceid              string      `json:"sourceid"`
+			Sourceid              interface{} `json:"sourceid,string"`
 			AutosyncLog           interface{} `json:"autosyncLog"`
 			IP4Last               string      `json:"ip4_last"`
 			IP4Unsub              string      `json:"ip4Unsub"`

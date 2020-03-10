@@ -137,22 +137,24 @@ type UpdateContactListStatusResponse struct {
 		Organization interface{} `json:"organization"`
 	} `json:"contacts"`
 	ContactList struct {
-		Contact               string      `json:"contact"`
-		List                  string      `json:"list"`
-		Form                  interface{} `json:"form"`
-		Seriesid              string      `json:"seriesid"`
-		Sdate                 string      `json:"sdate"`
-		Udate                 interface{} `json:"udate"`
-		Status                string      `json:"status"`
-		Responder             string      `json:"responder"`
-		Sync                  string      `json:"sync"`
-		Unsubreason           string      `json:"unsubreason"`
-		Campaign              interface{} `json:"campaign"`
-		Message               interface{} `json:"message"`
-		FirstName             string      `json:"first_name"`
-		LastName              string      `json:"last_name"`
-		IP4Sub                string      `json:"ip4Sub"`
-		Sourceid              string      `json:"sourceid"`
+		Contact     string      `json:"contact"`
+		List        string      `json:"list"`
+		Form        interface{} `json:"form"`
+		Seriesid    string      `json:"seriesid"`
+		Sdate       string      `json:"sdate"`
+		Udate       interface{} `json:"udate"`
+		Status      string      `json:"status"`
+		Responder   string      `json:"responder"`
+		Sync        string      `json:"sync"`
+		Unsubreason string      `json:"unsubreason"`
+		Campaign    interface{} `json:"campaign"`
+		Message     interface{} `json:"message"`
+		FirstName   string      `json:"first_name"`
+		LastName    string      `json:"last_name"`
+		IP4Sub      string      `json:"ip4Sub"`
+		// Update list status for a contact does not return a uniform type.
+		// If a contact is not a member of the list, it will return a number. Otherwise, a string is returned.
+		Sourceid              interface{} `json:"sourceid,string"`
 		AutosyncLog           interface{} `json:"autosyncLog"`
 		IP4Last               string      `json:"ip4_last"`
 		IP4Unsub              string      `json:"ip4Unsub"`
