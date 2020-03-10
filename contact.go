@@ -69,10 +69,14 @@ func (s *ContactsService) Create(contact *CreateContactRequest) (*CreateContactR
 	return c, resp, nil
 }
 
-type UpdateListStatusForContactRequest struct {
+type ContactList struct {
 	List    string `json:"list"`
 	Contact string `json:"contact"`
 	Status  string `json:"status"`
+}
+
+type UpdateListStatusForContactRequest struct {
+	ContactList *ContactList `json:"contactList"`
 }
 
 type UpdateContactListStatusResponse struct {

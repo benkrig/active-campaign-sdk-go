@@ -31,7 +31,7 @@ func TestContactService_Create(t *testing.T) {
 			t.Errorf("Request body = %+v, want %+v", response, input)
 		}
 
-		fmt.Fprint(w,
+		_, _ = fmt.Fprint(w,
 			`
 			{
 				"contact": {
@@ -81,9 +81,11 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 	defer teardown()
 
 	input := &UpdateListStatusForContactRequest{
-		List:    "l",
-		Contact: "c",
-		Status:  "s",
+		&ContactList{
+			List:    "l",
+			Contact: "c",
+			Status:  "0",
+		},
 	}
 
 	mux.HandleFunc("/api/3/contactLists", func(w http.ResponseWriter, r *http.Request) {
@@ -124,7 +126,11 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 				} `json:"links"`
 				ID         string      `json:"id"`
 				Automation interface{} `json:"automation"`
-			}{},
+			}{
+				Contact: "c",
+				List:    "l",
+				Status:  0,
+			},
 		}
 
 		testMethod(t, r, "POST")
@@ -132,7 +138,7 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 			t.Errorf("Request body = %+v, want %+v", response, input)
 		}
 
-		fmt.Fprint(w, `{}`)
+		_, _ = fmt.Fprint(w, `{}`)
 	})
 	contact, _, err := c.Contacts.UpdateListStatusForContact(input)
 	if err != nil {
