@@ -84,7 +84,7 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 		&ContactList{
 			List:    "l",
 			Contact: "c",
-			Status:  "0",
+			Status:  "1",
 		},
 	}
 
@@ -100,7 +100,8 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 				Form                  interface{} `json:"form"`
 				Seriesid              string      `json:"seriesid"`
 				Sdate                 string      `json:"sdate"`
-				Status                int         `json:"status"`
+				Udate                 interface{} `json:"udate"`
+				Status                string      `json:"status"`
 				Responder             string      `json:"responder"`
 				Sync                  string      `json:"sync"`
 				Unsubreason           string      `json:"unsubreason"`
@@ -113,6 +114,10 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 				AutosyncLog           interface{} `json:"autosyncLog"`
 				IP4Last               string      `json:"ip4_last"`
 				IP4Unsub              string      `json:"ip4Unsub"`
+				CreatedTimestamp      string      `json:"created_timestamp"`
+				UpdatedTimestamp      string      `json:"updated_timestamp"`
+				CreatedBy             interface{} `json:"created_by"`
+				UpdatedBy             interface{} `json:"updated_by"`
 				UnsubscribeAutomation interface{} `json:"unsubscribeAutomation"`
 				Links                 struct {
 					Automation            string `json:"automation"`
@@ -129,7 +134,7 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 			}{
 				Contact: "c",
 				List:    "l",
-				Status:  0,
+				Status:  "1",
 			},
 		}
 
@@ -153,7 +158,8 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 			Form                  interface{} `json:"form"`
 			Seriesid              string      `json:"seriesid"`
 			Sdate                 string      `json:"sdate"`
-			Status                int         `json:"status"`
+			Udate                 interface{} `json:"udate"`
+			Status                string      `json:"status"`
 			Responder             string      `json:"responder"`
 			Sync                  string      `json:"sync"`
 			Unsubreason           string      `json:"unsubreason"`
@@ -166,6 +172,10 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 			AutosyncLog           interface{} `json:"autosyncLog"`
 			IP4Last               string      `json:"ip4_last"`
 			IP4Unsub              string      `json:"ip4Unsub"`
+			CreatedTimestamp      string      `json:"created_timestamp"`
+			UpdatedTimestamp      string      `json:"updated_timestamp"`
+			CreatedBy             interface{} `json:"created_by"`
+			UpdatedBy             interface{} `json:"updated_by"`
 			UnsubscribeAutomation interface{} `json:"unsubscribeAutomation"`
 			Links                 struct {
 				Automation            string `json:"automation"`
@@ -181,6 +191,7 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 			Automation interface{} `json:"automation"`
 		}{},
 	}
+
 	if !reflect.DeepEqual(contact, want) {
 		t.Errorf("Contacts.UpdateListStatusForContact returned %+v, want %+v", contact, want)
 	}
