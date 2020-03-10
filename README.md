@@ -35,10 +35,12 @@ func main() {
     }
 
     c := ac.CreateContactRequest{
-        Email: "test@email.com",
-        FirstName: "testf",
-        LastName: "testl",
-        Phone: "1234567890",
+        &ac.Contact{
+            Email: "test@email.com",
+            FirstName: "testf",
+            LastName: "testl",
+            Phone: "1234567890",
+        },
     }
 
     contact, _, err := a.Contacts.Create(&c)

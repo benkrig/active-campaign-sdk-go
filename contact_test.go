@@ -13,47 +13,18 @@ func TestContactService_Create(t *testing.T) {
 	defer teardown()
 
 	input := &CreateContactRequest{
-		Email:     "e",
-		FirstName: "f",
-		LastName:  "l",
-		Phone:     "p",
+		&Contact{
+			Email: "e",
+		},
 	}
 
 	mux.HandleFunc("/api/3/contacts", func(w http.ResponseWriter, r *http.Request) {
-		v := new(ContactResponse)
+		v := new(CreateContactResponse)
 		_ = json.NewDecoder(r.Body).Decode(v)
 
-		response := &ContactResponse{
-			Email:     "e",
-			FirstName: "f",
-			LastName:  "l",
-			Cdate:     "",
-			Udate:     "",
-			Orgid:     "",
-			Orgname:   "",
-			Links: struct {
-				BounceLogs            string `json:"bounceLogs"`
-				ContactAutomations    string `json:"contactAutomations"`
-				ContactData           string `json:"contactData"`
-				ContactGoals          string `json:"contactGoals"`
-				ContactLists          string `json:"contactLists"`
-				ContactLogs           string `json:"contactLogs"`
-				ContactTags           string `json:"contactTags"`
-				ContactDeals          string `json:"contactDeals"`
-				Deals                 string `json:"deals"`
-				FieldValues           string `json:"fieldValues"`
-				GeoIps                string `json:"geoIps"`
-				Notes                 string `json:"notes"`
-				Organization          string `json:"organization"`
-				PlusAppend            string `json:"plusAppend"`
-				TrackingLogs          string `json:"trackingLogs"`
-				ScoreValues           string `json:"scoreValues"`
-				AccountContacts       string `json:"accountContacts"`
-				AutomationEntryCounts string `json:"automationEntryCounts"`
-			}{},
-			ID:           "",
-			Organization: "",
-		}
+		response := &CreateContactResponse{&CreatedContact{
+			Email: "e",
+		}}
 
 		testMethod(t, r, "POST")
 		if !reflect.DeepEqual(v, response) {
@@ -63,9 +34,9 @@ func TestContactService_Create(t *testing.T) {
 		fmt.Fprint(w,
 			`
 			{
-				"email": "e",
-				"firstName": "f",
-				"lastName": "l"
+				"contact": {
+					"email": "e"
+				}
 			}`)
 	})
 	contact, _, err := c.Contacts.Create(input)
@@ -73,37 +44,33 @@ func TestContactService_Create(t *testing.T) {
 		t.Errorf("Contacts.Create returned error: %v", err)
 	}
 
-	want := &ContactResponse{
-		Email:     "e",
-		FirstName: "f",
-		LastName:  "l",
-		Cdate:     "",
-		Udate:     "",
-		Orgid:     "",
-		Orgname:   "",
-		Links: struct {
-			BounceLogs            string `json:"bounceLogs"`
-			ContactAutomations    string `json:"contactAutomations"`
-			ContactData           string `json:"contactData"`
-			ContactGoals          string `json:"contactGoals"`
-			ContactLists          string `json:"contactLists"`
-			ContactLogs           string `json:"contactLogs"`
-			ContactTags           string `json:"contactTags"`
-			ContactDeals          string `json:"contactDeals"`
-			Deals                 string `json:"deals"`
-			FieldValues           string `json:"fieldValues"`
-			GeoIps                string `json:"geoIps"`
-			Notes                 string `json:"notes"`
-			Organization          string `json:"organization"`
-			PlusAppend            string `json:"plusAppend"`
-			TrackingLogs          string `json:"trackingLogs"`
-			ScoreValues           string `json:"scoreValues"`
-			AccountContacts       string `json:"accountContacts"`
-			AutomationEntryCounts string `json:"automationEntryCounts"`
-		}{},
-		ID:           "",
-		Organization: "",
-	}
+	want := &CreateContactResponse{
+		&CreatedContact{
+			Email: "e",
+			Cdate: "",
+			Udate: "",
+			Orgid: "",
+			Links: struct {
+				BounceLogs         string `json:"bounceLogs"`
+				ContactAutomations string `json:"contactAutomations"`
+				ContactData        string `json:"contactData"`
+				ContactGoals       string `json:"contactGoals"`
+				ContactLists       string `json:"contactLists"`
+				ContactLogs        string `json:"contactLogs"`
+				ContactTags        string `json:"contactTags"`
+				ContactDeals       string `json:"contactDeals"`
+				Deals              string `json:"deals"`
+				FieldValues        string `json:"fieldValues"`
+				GeoIps             string `json:"geoIps"`
+				Notes              string `json:"notes"`
+				Organization       string `json:"organization"`
+				PlusAppend         string `json:"plusAppend"`
+				TrackingLogs       string `json:"trackingLogs"`
+				ScoreValues        string `json:"scoreValues"`
+			}{},
+			ID:           "",
+			Organization: "",
+		}}
 	if !reflect.DeepEqual(contact, want) {
 		t.Errorf("Contacts.Create returned %+v, want %+v", contact, want)
 	}

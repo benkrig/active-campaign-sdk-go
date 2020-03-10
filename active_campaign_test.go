@@ -92,11 +92,13 @@ func TestNewRequest(t *testing.T) {
 
 	inURL, outURL := "foo", baseURL+"foo"
 	inBody, outBody := &CreateContactRequest{
-		Email:     "test@email.com",
-		FirstName: "testf",
-		LastName:  "testl",
-		Phone:     "",
-	}, `{"email":"test@email.com","firstName":"testf","lastName":"testl"}`+"\n"
+		&Contact{
+			Email:     "test@email.com",
+			FirstName: "testf",
+			LastName:  "testl",
+			Phone:     "",
+		},
+	}, `{"contact":{"email":"test@email.com","firstName":"testf","lastName":"testl"}}`+"\n"
 	req, _ := c.NewRequest(http.MethodPost, inURL, inBody)
 
 	// test that relative URL was expanded
@@ -107,7 +109,7 @@ func TestNewRequest(t *testing.T) {
 	// test that body was JSON encoded
 	body, _ := ioutil.ReadAll(req.Body)
 	if got, want := string(body), outBody; got != want {
-		t.Errorf("NewRequest(%q) Body is %v, want %v", inBody, got, want)
+		t.Errorf("NewRequest(%v) Body is %v, want %v", inBody, got, want)
 	}
 
 	// test that token is attached to the request

@@ -10,53 +10,56 @@ import (
 // Active Campaign API docs: https://developers.activecampaign.com/reference#contact
 type ContactsService service
 
-type CreateContactRequest struct {
+type Contact struct {
 	Email     string `json:"email"`
 	FirstName string `json:"firstName,omitempty"`
 	LastName  string `json:"lastName,omitempty"`
 	Phone     string `json:"phone,omitempty"`
 }
 
-type ContactResponse struct {
-	Email     string `json:"email"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Cdate     string `json:"cdate"`
-	Udate     string `json:"udate"`
-	Orgid     string `json:"orgid"`
-	Orgname   string `json:"orgname"`
-	Links     struct {
-		BounceLogs            string `json:"bounceLogs"`
-		ContactAutomations    string `json:"contactAutomations"`
-		ContactData           string `json:"contactData"`
-		ContactGoals          string `json:"contactGoals"`
-		ContactLists          string `json:"contactLists"`
-		ContactLogs           string `json:"contactLogs"`
-		ContactTags           string `json:"contactTags"`
-		ContactDeals          string `json:"contactDeals"`
-		Deals                 string `json:"deals"`
-		FieldValues           string `json:"fieldValues"`
-		GeoIps                string `json:"geoIps"`
-		Notes                 string `json:"notes"`
-		Organization          string `json:"organization"`
-		PlusAppend            string `json:"plusAppend"`
-		TrackingLogs          string `json:"trackingLogs"`
-		ScoreValues           string `json:"scoreValues"`
-		AccountContacts       string `json:"accountContacts"`
-		AutomationEntryCounts string `json:"automationEntryCounts"`
+type CreateContactRequest struct {
+	Contact *Contact `json:"contact"`
+}
+
+type CreatedContact struct {
+	Email string `json:"email"`
+	Cdate string `json:"cdate"`
+	Udate string `json:"udate"`
+	Orgid string `json:"orgid"`
+	Links struct {
+		BounceLogs         string `json:"bounceLogs"`
+		ContactAutomations string `json:"contactAutomations"`
+		ContactData        string `json:"contactData"`
+		ContactGoals       string `json:"contactGoals"`
+		ContactLists       string `json:"contactLists"`
+		ContactLogs        string `json:"contactLogs"`
+		ContactTags        string `json:"contactTags"`
+		ContactDeals       string `json:"contactDeals"`
+		Deals              string `json:"deals"`
+		FieldValues        string `json:"fieldValues"`
+		GeoIps             string `json:"geoIps"`
+		Notes              string `json:"notes"`
+		Organization       string `json:"organization"`
+		PlusAppend         string `json:"plusAppend"`
+		TrackingLogs       string `json:"trackingLogs"`
+		ScoreValues        string `json:"scoreValues"`
 	} `json:"links"`
 	ID           string `json:"id"`
 	Organization string `json:"organization"`
 }
 
-func (s *ContactsService) Create(contact *CreateContactRequest) (*ContactResponse, *Response, error) {
+type CreateContactResponse struct {
+	Contact *CreatedContact `json:"contact"`
+}
+
+func (s *ContactsService) Create(contact *CreateContactRequest) (*CreateContactResponse, *Response, error) {
 	u := "contacts"
 	req, err := s.client.NewRequest(http.MethodPost, u, contact)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	c := &ContactResponse{}
+	c := &CreateContactResponse{}
 	resp, err := s.client.Do(req, c)
 	if err != nil {
 		return nil, resp, err
