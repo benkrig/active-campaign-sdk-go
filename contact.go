@@ -87,6 +87,7 @@ type UpdateContactListStatusResponse struct {
 		FirstName           string `json:"firstName"`
 		LastName            string `json:"lastName"`
 		Orgid               string `json:"orgid"`
+		Orgname             string `json:"orgname"`
 		SegmentioID         string `json:"segmentio_id"`
 		BouncedHard         string `json:"bounced_hard"`
 		BouncedSoft         string `json:"bounced_soft"`
@@ -104,26 +105,33 @@ type UpdateContactListStatusResponse struct {
 		Anonymized          string `json:"anonymized"`
 		Adate               string `json:"adate"`
 		Udate               string `json:"udate"`
+		Edate               string `json:"edate"`
 		DeletedAt           string `json:"deleted_at"`
 		CreatedUtcTimestamp string `json:"created_utc_timestamp"`
 		UpdatedUtcTimestamp string `json:"updated_utc_timestamp"`
+		CreatedTimestamp    string `json:"created_timestamp"`
+		UpdatedTimestamp    string `json:"updated_timestamp"`
+		CreatedBy           string `json:"created_by"`
+		UpdatedBy           string `json:"updated_by"`
 		Links               struct {
-			BounceLogs         string `json:"bounceLogs"`
-			ContactAutomations string `json:"contactAutomations"`
-			ContactData        string `json:"contactData"`
-			ContactGoals       string `json:"contactGoals"`
-			ContactLists       string `json:"contactLists"`
-			ContactLogs        string `json:"contactLogs"`
-			ContactTags        string `json:"contactTags"`
-			ContactDeals       string `json:"contactDeals"`
-			Deals              string `json:"deals"`
-			FieldValues        string `json:"fieldValues"`
-			GeoIps             string `json:"geoIps"`
-			Notes              string `json:"notes"`
-			Organization       string `json:"organization"`
-			PlusAppend         string `json:"plusAppend"`
-			TrackingLogs       string `json:"trackingLogs"`
-			ScoreValues        string `json:"scoreValues"`
+			BounceLogs            string `json:"bounceLogs"`
+			ContactAutomations    string `json:"contactAutomations"`
+			ContactData           string `json:"contactData"`
+			ContactGoals          string `json:"contactGoals"`
+			ContactLists          string `json:"contactLists"`
+			ContactLogs           string `json:"contactLogs"`
+			ContactTags           string `json:"contactTags"`
+			ContactDeals          string `json:"contactDeals"`
+			Deals                 string `json:"deals"`
+			FieldValues           string `json:"fieldValues"`
+			GeoIps                string `json:"geoIps"`
+			Notes                 string `json:"notes"`
+			Organization          string `json:"organization"`
+			PlusAppend            string `json:"plusAppend"`
+			TrackingLogs          string `json:"trackingLogs"`
+			ScoreValues           string `json:"scoreValues"`
+			AccountContacts       string `json:"accountContacts"`
+			AutomationEntryCounts string `json:"automationEntryCounts"`
 		} `json:"links"`
 		ID           string      `json:"id"`
 		Organization interface{} `json:"organization"`
@@ -134,7 +142,8 @@ type UpdateContactListStatusResponse struct {
 		Form                  interface{} `json:"form"`
 		Seriesid              string      `json:"seriesid"`
 		Sdate                 string      `json:"sdate"`
-		Status                int         `json:"status"`
+		Udate                 interface{} `json:"udate"`
+		Status                string      `json:"status"`
 		Responder             string      `json:"responder"`
 		Sync                  string      `json:"sync"`
 		Unsubreason           string      `json:"unsubreason"`
@@ -147,6 +156,10 @@ type UpdateContactListStatusResponse struct {
 		AutosyncLog           interface{} `json:"autosyncLog"`
 		IP4Last               string      `json:"ip4_last"`
 		IP4Unsub              string      `json:"ip4Unsub"`
+		CreatedTimestamp      string      `json:"created_timestamp"`
+		UpdatedTimestamp      string      `json:"updated_timestamp"`
+		CreatedBy             interface{} `json:"created_by"`
+		UpdatedBy             interface{} `json:"updated_by"`
 		UnsubscribeAutomation interface{} `json:"unsubscribeAutomation"`
 		Links                 struct {
 			Automation            string `json:"automation"`
