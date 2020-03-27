@@ -21,7 +21,7 @@ type CreateTagRequest struct {
 	Tag *Tag `json:"tag"`
 }
 
-// CreatedTag is a struct embedded in the response for creating a tag.
+// CreatedTag is a struct embedded in the response for creating or retrieving a tag.
 type CreatedTag struct {
 	Tag         string `json:"tag"`
 	Description string `json:"description"`
@@ -35,20 +35,38 @@ type Links struct {
 	ContactGoalTags string `json:"contactGoalTags"`
 }
 
-// CreateTagResponse is the response body returned from creating a tag.
-type CreateTagResponse struct {
+// TagResponse is the response body returned from creating or retrieving a tag.
+type TagResponse struct {
 	Tag *CreatedTag `json:"tag"`
 }
 
 // Create a tag.
-func (s *TagsService) Create(tag *CreateTagRequest) (*CreateTagResponse, *Response, error) {
+func (s *TagsService) Create(tag *CreateTagRequest) (*TagResponse, *Response, error) {
 	u := "tags"
 	req, err := s.client.NewRequest(http.MethodPost, u, tag)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	c := &CreateTagResponse{}
+	c := &TagResponse{}
+	resp, err := s.client.Do(req, c)
+	if err != nil {
+		return nil, resp, err
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	return c, resp, nil
+}
+
+// Retrieve a tag.
+func (s *TagsService) Retrieve(id string) (*TagResponse, *Response, error) {
+	u := "tags/" + id
+	req, err := s.client.NewRequest(http.MethodGet, u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	c := &TagResponse{}
 	resp, err := s.client.Do(req, c)
 	if err != nil {
 		return nil, resp, err

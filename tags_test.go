@@ -21,7 +21,7 @@ func TestTagService_Create(t *testing.T) {
 	}
 
 	mux.HandleFunc("/api/3/tags", func(w http.ResponseWriter, r *http.Request) {
-		v := new(CreateTagResponse)
+		v := new(TagResponse)
 		_ = json.NewDecoder(r.Body).Decode(v)
 
 		testMethod(t, r, "POST")
@@ -55,7 +55,7 @@ func TestTagService_Create(t *testing.T) {
 		t.Errorf("Tags.Create returned error: %v", err)
 	}
 
-	want := &CreateTagResponse{
+	want := &TagResponse{
 		&CreatedTag{
 			Tag:         "My Tag",
 			TagType:     "contact",
@@ -81,7 +81,7 @@ func TestTagService_Create_EmptyTag(t *testing.T) {
 	}
 
 	mux.HandleFunc("/api/3/tags", func(w http.ResponseWriter, r *http.Request) {
-		v := new(CreateTagResponse)
+		v := new(TagResponse)
 		_ = json.NewDecoder(r.Body).Decode(v)
 
 		testMethod(t, r, "POST")
@@ -112,7 +112,7 @@ func TestTagService_Create_EmptyTag(t *testing.T) {
 		t.Errorf("Tags.Create returned error: %v", err)
 	}
 
-	want := &CreateTagResponse{
+	want := &TagResponse{
 		&CreatedTag{
 			Tag:         "",
 			Description: "",
@@ -123,5 +123,61 @@ func TestTagService_Create_EmptyTag(t *testing.T) {
 		}}
 	if !reflect.DeepEqual(tag, want) {
 		t.Errorf("Tags.Create returned %+v, want %+v", tag, want)
+	}
+}
+
+func TestTagService_Retrieve(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/3/tags/1", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testRequestURL(t, r, "/api/3/tags/1")
+		_, _ = fmt.Fprint(w,
+			`
+			{
+				"tag": {
+					"tag": "My Tag",
+					"tagType": "contact",
+					"description": "Description",
+					"cdate": "2020-03-27T13:09:10-05:00",
+					"links": {
+						"contactGoalTags": "https://:account.api-us1.com/api/:version/tags/1/contactGoalTags"
+					},
+					"id": "1"
+				}
+			}`)
+	})
+	tag, _, err := c.Tags.Retrieve("1")
+	if err != nil {
+		t.Errorf("Tags.Retrieve returned error: %v", err)
+	}
+	if tag == nil {
+		t.Errorf("Expected tag. Tag is nil")
+	}
+	if tag.Tag.ID != "1" {
+		t.Errorf("Expected tag.Tag.ID = 1. Got tag.Tag.ID = %s", tag.Tag.ID)
+	}
+}
+
+func TestTagService_Retrieve_NotFound(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/3/tags/1", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testRequestURL(t, r, "/api/3/tags/1")
+		w.WriteHeader(http.StatusNotFound)
+	})
+
+	_, resp, err := c.Tags.Retrieve("1")
+	if err == nil {
+		t.Errorf("Expected error. Error is nil")
+	}
+	if resp == nil {
+		t.Errorf("Expected response. Response is nil")
+	}
+	if resp != nil && resp.StatusCode != http.StatusNotFound {
+		t.Errorf("Expected status code %d. Got %d", http.StatusNotFound, resp.StatusCode)
 	}
 }
