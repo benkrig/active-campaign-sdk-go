@@ -152,7 +152,7 @@ type UpdateContactListStatusResponse struct {
 		FirstName   string      `json:"first_name"`
 		LastName    string      `json:"last_name"`
 		IP4Sub      string      `json:"ip4Sub"`
-		// Update list status for a contact does not return a uniform type.
+		// Update list status for a contact does not return a uniform type for Sourceid.
 		// If a contact is not a member of the list, it will return a number. Otherwise, a string is returned.
 		Sourceid              interface{} `json:"sourceid,string"`
 		AutosyncLog           interface{} `json:"autosyncLog"`
