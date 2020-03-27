@@ -11,7 +11,8 @@ import (
 )
 
 // httpClient defines an interface for an http.Client implementation so that alternative
-// http Clients can be passed in for making requests
+// If you'd prefer not to pass in your API token to this package, you can implement httpClient and
+// handle adding the Api-Token on your own. See examples/custom_client.go to get started.
 type httpClient interface {
 	Do(request *http.Request) (response *http.Response, err error)
 }
@@ -43,6 +44,7 @@ type service struct {
 	client *Client
 }
 
+// ClientOpts are used to build a new client. If desired, a custom httpClient can be passed in.
 type ClientOpts struct {
 	HttpClient httpClient
 	BaseUrl    string
@@ -54,7 +56,9 @@ type ClientOpts struct {
 // If a nil httpClient is provided, a new http.DefaultClient will be used.
 func NewClient(opts *ClientOpts) (*Client, error) {
 	var httpClient httpClient
-	if opts.HttpClient == nil {
+	if opts.HttpClient != nil {
+		httpClient = opts.HttpClient
+	} else {
 		httpClient = http.DefaultClient
 	}
 
@@ -104,7 +108,9 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 		return nil, err
 	}
 
-	req.Header.Set(headerApiToken, c.token)
+	if c.token != "" {
+		req.Header.Set(headerApiToken, c.token)
+	}
 	req.Header.Set(headerContentType, "application/json")
 	return req, nil
 }
