@@ -140,6 +140,7 @@ func TestTagService_Retrieve(t *testing.T) {
 					"tag": "My Tag",
 					"tagType": "contact",
 					"description": "Description",
+					"subscriber_count": "0",
 					"cdate": "2020-03-27T13:09:10-05:00",
 					"links": {
 						"contactGoalTags": "https://:account.api-us1.com/api/:version/tags/1/contactGoalTags"
@@ -179,5 +180,59 @@ func TestTagService_Retrieve_NotFound(t *testing.T) {
 	}
 	if resp != nil && resp.StatusCode != http.StatusNotFound {
 		t.Errorf("Expected status code %d. Got %d", http.StatusNotFound, resp.StatusCode)
+	}
+}
+
+func TestTagService_ListAll(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/3/tags", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testRequestURL(t, r, "/api/3/tags")
+		_, _ = fmt.Fprint(w,
+			`
+			{
+				"tags": [
+					{
+						"tag": "My Tag",
+						"tagType": "contact",
+						"description": "Description",
+						"subscriber_count": "0",
+						"cdate": "2020-03-27T13:09:10-05:00",
+						"links": {
+							"contactGoalTags": "https://:account.api-us1.com/api/:version/tags/1/contactGoalTags"
+						},
+						"id": "1"
+					},
+					{
+						"tag": "My Tag2",
+						"tagType": "template",
+						"description": "Description2",
+						"subscriber_count": "0",
+						"cdate": "2020-04-27T13:09:10-05:00",
+						"links": {
+							"contactGoalTags": "https://:account.api-us1.com/api/:version/tags/2/contactGoalTags"
+						},
+						"id": "2"
+					}
+				],
+				"meta": {
+					"total": "2"
+				}
+			}`)
+	})
+	tags, _, err := c.Tags.ListAll()
+	if err != nil {
+		t.Errorf("Tags.ListAll returned error: %v", err)
+	}
+	if tags == nil {
+		t.Errorf("Expected tags. Tags is nil")
+	}
+	if len(tags.Tags) != 2 {
+		t.Errorf("Expected 2 tags. Got %d", len(tags.Tags))
+	}
+	if tags.Meta.Total != "2" {
+		t.Errorf("Expected meta.Total = 2. Got %s", tags.Meta.Total)
 	}
 }
