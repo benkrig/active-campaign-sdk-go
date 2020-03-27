@@ -36,6 +36,7 @@ type Client struct {
 
 	// Services used for talking to different parts of the Active Campaign API.
 	Contacts *ContactsService
+	Tags     *TagsService
 }
 
 type service struct {
@@ -75,6 +76,7 @@ func NewClient(opts *ClientOpts) (*Client, error) {
 	}
 	c.common.client = c
 	c.Contacts = (*ContactsService)(&c.common)
+	c.Tags = (*TagsService)(&c.common)
 	return c, nil
 }
 
