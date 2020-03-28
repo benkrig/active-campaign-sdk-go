@@ -126,6 +126,32 @@ func TestTagService_Create_EmptyTag(t *testing.T) {
 	}
 }
 
+func TestTagService_Create_DoError(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/3/tags", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "POST")
+		testRequestURL(t, r, "/api/3/tags")
+		w.WriteHeader(http.StatusBadRequest)
+	})
+
+	input := &CreateTagRequest{
+		&Tag{},
+	}
+
+	_, resp, err := c.Tags.Create(input)
+	if err == nil {
+		t.Errorf("Expected error. Error is nil")
+	}
+	if resp == nil {
+		t.Errorf("Expected response. Response is nil")
+	}
+	if resp != nil && resp.StatusCode != http.StatusBadRequest {
+		t.Errorf("Expected status code %d. Got %d", http.StatusBadRequest, resp.StatusCode)
+	}
+}
+
 func TestTagService_Retrieve(t *testing.T) {
 	c, mux, _, teardown := setup()
 	defer teardown()
@@ -158,6 +184,28 @@ func TestTagService_Retrieve(t *testing.T) {
 	}
 	if tag.Tag.ID != "1" {
 		t.Errorf("Expected tag.Tag.ID = 1. Got tag.Tag.ID = %s", tag.Tag.ID)
+	}
+}
+
+func TestTagService_Retrieve_DoError(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/3/tags/1", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testRequestURL(t, r, "/api/3/tags/1")
+		w.WriteHeader(http.StatusBadRequest)
+	})
+
+	_, resp, err := c.Tags.Retrieve("1")
+	if err == nil {
+		t.Errorf("Expected error. Error is nil")
+	}
+	if resp == nil {
+		t.Errorf("Expected response. Response is nil")
+	}
+	if resp != nil && resp.StatusCode != http.StatusBadRequest {
+		t.Errorf("Expected status code %d. Got %d", http.StatusBadRequest, resp.StatusCode)
 	}
 }
 
@@ -234,5 +282,27 @@ func TestTagService_ListAll(t *testing.T) {
 	}
 	if tags.Meta.Total != "2" {
 		t.Errorf("Expected meta.Total = 2. Got %s", tags.Meta.Total)
+	}
+}
+
+func TestTagService_ListAll_DoError(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/3/tags", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testRequestURL(t, r, "/api/3/tags")
+		w.WriteHeader(http.StatusBadRequest)
+	})
+
+	_, resp, err := c.Tags.ListAll()
+	if err == nil {
+		t.Errorf("Expected error. Error is nil")
+	}
+	if resp == nil {
+		t.Errorf("Expected response. Response is nil")
+	}
+	if resp != nil && resp.StatusCode != http.StatusBadRequest {
+		t.Errorf("Expected status code %d. Got %d", http.StatusBadRequest, resp.StatusCode)
 	}
 }
