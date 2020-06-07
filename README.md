@@ -26,7 +26,8 @@ func main() {
     baseURL := os.Getenv("YOUR_BASE_URL_KEY")
     token := os.Getenv("YOUR_TOKEN_KEY")
 
-    a, err := ac.NewClient(&ac.ClientOpts{
+    a, err := ac.NewClient(
+        &ac.ClientOpts{
             BaseUrl: baseURL, 
             Token: token,
         },

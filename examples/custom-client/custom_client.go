@@ -15,10 +15,11 @@ func main() {
 
 	baseURL := os.Getenv("YOUR_BASE_URL_KEY")
 
-	a, err := ac.NewClient(&ac.ClientOpts{
-		HttpClient: client,
-		BaseUrl:    baseURL,
-	},
+	a, err := ac.NewClient(
+		&ac.ClientOpts{
+			HttpClient: client,
+			BaseUrl:    baseURL,
+		},
 	)
 	if err != nil {
 		panic(err)
