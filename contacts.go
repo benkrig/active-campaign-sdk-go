@@ -194,3 +194,43 @@ func (s *ContactsService) UpdateListStatusForContact(contact *UpdateListStatusFo
 
 	return c, resp, nil
 }
+
+// ContactTag is used to add a tag to a contact.
+type ContactTag struct {
+	CDate   string `json:"cdate"`
+	Contact string `json:"contact"`
+	ID      string `json:"id"`
+	Links   struct {
+		Contact string `json:"contact"`
+		Tag     string `json:"tag"`
+	} `json:"links"`
+	Tag string `json:"tag"`
+}
+
+// AddTagToContactRequest is the request body used for adding a tag to a contact.
+type AddTagToContactRequest struct {
+	ContactTag *ContactTag `json:"contactTag"`
+}
+
+// AddTagToContactRequest is the response body from adding a tag to a contact.
+type AddTagToContactResponse struct {
+	ContactTag *ContactTag `json:"contactTag"`
+}
+
+// AddTagToContact adds a tag to a contact.
+func (s *ContactsService) AddTagToContact(contact *AddTagToContactRequest) (*AddTagToContactResponse, *Response, error) {
+	u := "contactTags"
+	req, err := s.client.NewRequest(http.MethodPost, u, contact)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	c := &AddTagToContactResponse{}
+	resp, err := s.client.Do(req, c)
+	if err != nil {
+		return nil, resp, err
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	return c, resp, nil
+}
