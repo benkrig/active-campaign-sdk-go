@@ -3,6 +3,7 @@ package active_campaign
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"reflect"
 	"testing"
@@ -264,5 +265,44 @@ func TestContactService_AddTagToContact(t *testing.T) {
 	}
 	if !reflect.DeepEqual(contact, want) {
 		t.Errorf("Contacts.AddTagToContact returned %+v, want %+v", contact, want)
+	}
+}
+
+func TestContactService_AddTagToContact_contactNotFound(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	input := &AddTagToContactRequest{
+		ContactTag: &ContactTag{
+			Contact: "9999999",
+			Tag:     "1",
+		},
+	}
+
+	mux.HandleFunc("/api/3/contactTags", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		_, _ = fmt.Fprint(w, `{"message": "Contact not found"}`)
+	})
+	contactTag, resp, err := c.Contacts.AddTagToContact(input)
+	if err == nil {
+		t.Error("Contacts.AddTagToContact returned nil err, want not nil")
+	}
+	if contactTag != nil {
+		t.Errorf("Contacts.AddTagToContact returned %+v, want nil", contactTag)
+	}
+	if resp == nil {
+		t.Error("Contacts.AddTagToContact returned nil resp, want not nil")
+	}
+	if resp != nil && resp.StatusCode != http.StatusNotFound {
+		t.Errorf("Contacts.AddTagToContact returned status code %+v, want %+v", resp.StatusCode, http.StatusNotFound)
+	}
+	defer resp.Body.Close()
+
+	body, _ := ioutil.ReadAll(resp.Body)
+	bodyString := string(body)
+
+	want := `{"message": "Contact not found"}`
+	if !reflect.DeepEqual(bodyString, want) {
+		t.Errorf("Contacts.AddTagToContact resp.Body returned %+v, want %+v", bodyString, want)
 	}
 }
