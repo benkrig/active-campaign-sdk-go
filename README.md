@@ -2,7 +2,7 @@
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/benkrig/active-campaign-sdk-go?tab=overview)
 [![Build Status](https://travis-ci.com/benkrig/active-campaign-sdk-go.svg?token=zD75aqrV8gE1Q1ghw6yU&branch=master)](https://travis-ci.com/benkrig/active-campaign-sdk-go)
 [![codecov](https://codecov.io/gh/benkrig/active-campaign-sdk-go/branch/master/graph/badge.svg?token=PR8PBM0NGX)](https://codecov.io/gh/benkrig/active-campaign-sdk-go)
-
+[![Go Report Card](https://goreportcard.com/badge/github.com/benkrig/active-campaign-sdk-go)](https://goreportcard.com/report/github.com/benkrig/active-campaign-sdk-go)
 
 **active-campaign-sdk-go** provides access to the [Active Campaign API V3](https://developers.activecampaign.com/reference) for Go. Currently, it's heavily under development.
 ## Usage ##
