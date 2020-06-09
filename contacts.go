@@ -197,22 +197,19 @@ func (s *ContactsService) UpdateListStatusForContact(contact *UpdateListStatusFo
 
 // ContactTag is used to add a tag to a contact.
 type ContactTag struct {
-	CDate   string `json:"cdate"`
+	CDate   string `json:"cdate,omitempty"`
 	Contact string `json:"contact"`
-	ID      string `json:"id"`
-	Links   struct {
-		Contact string `json:"contact"`
-		Tag     string `json:"tag"`
-	} `json:"links"`
+	ID      string `json:"id,omitempty"`
+	Links   *struct {
+		Contact string `json:"contact,omitempty"`
+		Tag     string `json:"tag,omitempty"`
+	} `json:"links,omitempty"`
 	Tag string `json:"tag"`
 }
 
 // AddTagToContactRequest is the request body used for adding a tag to a contact.
 type AddTagToContactRequest struct {
-	ContactTag struct {
-		Contact string `json:"contact"`
-		Tag     string `json:"tag"`
-	} `json:"contactTag"`
+	ContactTag *ContactTag `json:"contactTag"`
 }
 
 // AddTagToContactResponse is the response body from adding a tag to a contact.
