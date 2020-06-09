@@ -209,10 +209,13 @@ type ContactTag struct {
 
 // AddTagToContactRequest is the request body used for adding a tag to a contact.
 type AddTagToContactRequest struct {
-	ContactTag *ContactTag `json:"contactTag"`
+	ContactTag struct {
+		Contact string `json:"contact"`
+		Tag     string `json:"tag"`
+	} `json:"contactTag"`
 }
 
-// AddTagToContactRequest is the response body from adding a tag to a contact.
+// AddTagToContactResponse is the response body from adding a tag to a contact.
 type AddTagToContactResponse struct {
 	ContactTag *ContactTag `json:"contactTag"`
 }
