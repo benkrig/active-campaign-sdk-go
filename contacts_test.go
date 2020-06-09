@@ -196,3 +196,73 @@ func TestContactService_UpdateListStatusForContact(t *testing.T) {
 		t.Errorf("Contacts.UpdateListStatusForContact returned %+v, want %+v", contact, want)
 	}
 }
+
+func TestContactService_AddTagToContact(t *testing.T) {
+	c, mux, _, teardown := setup()
+	defer teardown()
+
+	input := &AddTagToContactRequest{
+		ContactTag: &ContactTag{
+			Contact: "1",
+			Tag:     "2",
+		},
+	}
+
+	mux.HandleFunc("/api/3/contactTags", func(w http.ResponseWriter, r *http.Request) {
+		v := new(AddTagToContactResponse)
+		_ = json.NewDecoder(r.Body).Decode(v)
+
+		response := &AddTagToContactResponse{
+			ContactTag: &ContactTag{
+				CDate:   "",
+				Contact: "1",
+				ID:      "",
+				Links:   nil,
+				Tag:     "2",
+			},
+		}
+
+		testMethod(t, r, "POST")
+		if !reflect.DeepEqual(v, response) {
+			t.Errorf("Request body = %+v, want %+v", response, input)
+		}
+
+		_, _ = fmt.Fprint(w,
+			`
+			{
+				"contactTag": {
+					"contact": "1",
+        			"tag": "2",
+        			"cdate": "2020-06-08T19:49:42-05:00",
+        			"links": {
+            			"tag": "https://your_base_url.api-us1.com/api/3/contactTags/3/tag",
+            			"contact": "https://your_base_url.api-us1.com/api/3/contactTags/3/contact"
+        			},
+        			"id": "3"
+				}
+			}`)
+	})
+	contact, _, err := c.Contacts.AddTagToContact(input)
+	if err != nil {
+		t.Errorf("Contacts.AddTagToContact returned error: %v", err)
+	}
+
+	want := &AddTagToContactResponse{
+		ContactTag: &ContactTag{
+			CDate:   "2020-06-08T19:49:42-05:00",
+			Contact: "1",
+			ID:      "3",
+			Links: &struct {
+				Contact string `json:"contact,omitempty"`
+				Tag     string `json:"tag,omitempty"`
+			}{
+				Contact: "https://your_base_url.api-us1.com/api/3/contactTags/3/contact",
+				Tag:     "https://your_base_url.api-us1.com/api/3/contactTags/3/tag",
+			},
+			Tag: "2",
+		},
+	}
+	if !reflect.DeepEqual(contact, want) {
+		t.Errorf("Contacts.AddTagToContact returned %+v, want %+v", contact, want)
+	}
+}
