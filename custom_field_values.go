@@ -14,14 +14,14 @@ type FieldValue struct {
 	Contact string      `json:"contact"`
 	Field   interface{} `json:"field"`
 	Value   interface{} `json:"value"`
-	Cdate   string      `json:"cdate"`
-	Udate   string      `json:"udate"`
+	Cdate   string      `json:"cdate,omitempty"`
+	Udate   string      `json:"udate,omitempty"`
 	Links   struct {
-		Owner string `json:"owner"`
-		Field string `json:"field"`
-	} `json:"links"`
-	ID    string      `json:"id"`
-	Owner interface{} `json:"owner"`
+		Owner string `json:"owner,omitempty"`
+		Field string `json:"field,omitempty"`
+	} `json:"links,omitempty"`
+	ID    string      `json:"id,omitempty"`
+	Owner interface{} `json:"owner,omitempty"`
 }
 
 // CreateCustomFieldValueResponse is the response body from updating a custom field value on a contact.
