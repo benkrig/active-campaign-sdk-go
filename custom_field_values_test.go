@@ -65,8 +65,8 @@ func TestContactsService_CreateCustomFieldValue(t *testing.T) {
 			Cdate:   "2020-06-24T15:30:54-05:00",
 			Udate:   "2020-06-24T15:30:54-05:00",
 			Links: struct {
-				Owner string `json:"owner"`
-				Field string `json:"field"`
+				Owner string `json:"owner,omitempty"`
+				Field string `json:"field,omitempty"`
 			}{},
 			ID:    "10",
 			Owner: "#",
