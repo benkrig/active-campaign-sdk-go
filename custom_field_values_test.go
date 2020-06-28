@@ -64,12 +64,9 @@ func TestContactsService_CreateCustomFieldValue(t *testing.T) {
 			Value:   "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
 			Cdate:   "2020-06-24T15:30:54-05:00",
 			Udate:   "2020-06-24T15:30:54-05:00",
-			Links: struct {
-				Owner string `json:"owner,omitempty"`
-				Field string `json:"field,omitempty"`
-			}{},
-			ID:    "10",
-			Owner: "#",
+			Links:   nil,
+			ID:      "10",
+			Owner:   "#",
 		},
 	}
 	if !reflect.DeepEqual(fieldValue, want) {

@@ -16,7 +16,7 @@ type FieldValue struct {
 	Value   interface{} `json:"value"`
 	Cdate   string      `json:"cdate,omitempty"`
 	Udate   string      `json:"udate,omitempty"`
-	Links   struct {
+	Links   *struct {
 		Owner string `json:"owner,omitempty"`
 		Field string `json:"field,omitempty"`
 	} `json:"links,omitempty"`
